@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}'>
 </head>
 <body>
+{% include "base/header.html" %}
     <form class="box" action="/add_teacher/" method="post">
         {% csrf_token %}
         {{ form}}

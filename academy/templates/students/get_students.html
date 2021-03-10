@@ -5,11 +5,33 @@
     <title>Список студентов</title>
 </head>
 <body>
-{% for student in students %}
-    <div>
-        Имя: {{ student.first_name }} Фамилия:  {{ student.last_name }} Почта: {{ student.email }}
-    </div>
-{% endfor %}
+{% include "base/header.html" %}
+<div class="container">
+  <div class="row">
+    <button style="width: 30%;display: block;margin: 20px auto;"><a href="{% url 'add_student' %}" style="display: block;width: 100%;height: 100%;color: black;"><i class="fas fa-plus-square"> Добавить Студента</i></a></button>
+    <table class="table col-6">
+      <thead>
+        <tr>
+          <th scope="col">Имя</th>
+          <th scope="col">Фамилия</th>
+          <th scope="col">Почта</th>
+          <th scope="col">Действие</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for student in students %}
+        <tr>
+          <td>{{ student.first_name }}</td>
+          <td>{{ student.last_name }}</td>
+          <td>{{ student.email }}</td>
+          <td><a href="{% url 'edit_student' id=student.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_student' id=student.id %}"><i class="far fa-trash-alt"></i></a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+</div>
 
 </body>
 </html>

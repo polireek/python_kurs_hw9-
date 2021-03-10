@@ -3,18 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Добавить группу</title>
+    <title>Изменить группу</title>
 
 
     <link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}'>
 </head>
 <body>
 {% include "base/header.html" %}
-    <form class="box" action="/add_course/" method="post">
+    <form class="box" method="post">
         {{ form.as_p }}
         {% csrf_token %}
 
-      <input type="submit" name="" value="Добавить">
+      <input type="submit" name="" value="Сохранить">
     </form>
 </body>
 </html>

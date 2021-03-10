@@ -1,11 +1,9 @@
 body{
-  margin: 0;
-  padding: 0;
   font-family: sans-serif;
   background: #34495e;
 }
 .box{
-  width: 300px;
+  width: 23%;
   padding: 40px;
   position: absolute;
   top: 50%;
