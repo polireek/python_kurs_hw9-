@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Group, Lecturer, Student
-from .forms import AddStudentForm, AddLecturerForm, AddGroupForm
+from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
+from .tasks import send_email
 
 
 
@@ -109,3 +110,22 @@ def edit_group(request, id):
 def delete_group(request, id):
     Group.objects.filter(id=id).delete()
     return redirect('get_groups')
+
+
+def send_message_to_email(request):
+    new_message = None
+    if request.method == 'POST':
+        data = { 'name': "IDK", 'email': "polireek@gmail.com", 'message': "Its working"}
+        send_email(data)
+        print(data["email"])
+        message_form = ContactForm(data=request.POST)
+        if message_form.is_valid():
+            new_message = message_form.save(commit=False)
+            new_message.save()
+
+    context = {
+        'form': ContactForm(),
+        'new_message': new_message
+    }
+
+    return render(request, 'contact.html', context)

@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SENDGRID_KEY ='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'
+EMAIL_SENDER = 'nikmenplay@gmail.com'
+EMAIL_RECEIVER = 'polireek@gmail.com'
+
+CELERY_BROKER_URL = 'amqp://localhost'
 
 # Application definition
 
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     'fontawesome-free',
     'silk',
     'logger',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [

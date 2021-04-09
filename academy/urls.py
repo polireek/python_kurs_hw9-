@@ -15,5 +15,6 @@ urlpatterns = [
     path('get_lecturer/<int:id>/edit/', views.edit_lecturer, name='edit_lecturer'),
     path('get_lecturer/<int:id>/delete/', views.delete_lecturer, name='delete_lecturer'),
     path('get_group/<int:id>/edit/', views.edit_group, name='edit_group'),
-    path('get_group/<int:id>/delete/', views.delete_group, name='delete_group')
+    path('get_group/<int:id>/delete/', views.delete_group, name='delete_group'),
+    path('contact_us/', views.send_message_to_email, name='contact_us'),
 ]

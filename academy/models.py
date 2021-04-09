@@ -27,3 +27,15 @@ class Group(models.Model):
 
     def __str__(self):
         return self.course
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=35)
+    message = models.CharField(max_length=550)
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'email': self.email,
+            'message': self.message,
+        }

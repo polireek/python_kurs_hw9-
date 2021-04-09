@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Student, Lecturer, Group
+from .models import Student, Lecturer, Group, Contact
 
 
 class AddStudentForm(forms.ModelForm):
@@ -30,4 +30,14 @@ class AddGroupForm(forms.ModelForm):
         fields = ('course',
                   'students',
                   "teacher",
+                  )
+
+
+class ContactForm(forms.ModelForm):
+
+    class Meta:
+        model = Contact
+        fields = ('name',
+                  'email',
+                  "message",
                   )
