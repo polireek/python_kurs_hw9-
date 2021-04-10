@@ -1,7 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files
-__pycache__/
+/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -11,7 +11,7 @@ __pycache__/
 # Distribution / packaging
 .idea
 .Python
-migrations/
+/migrations/
 build/
 develop-eggs/
 dist/
