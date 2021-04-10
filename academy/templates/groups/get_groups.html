@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% load academy_extras %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +14,7 @@
 {% for group in groups %}
 
 <div class="card border-success mb-4 col-4" style="max-width: 18rem;margin: 30px auto;">
-  <div class="card-header bg-transparent border-success">Группа: {{ group.course }}<br>Учитель:  {{ group.teacher }}</div>
+  <div class="card-header bg-transparent border-success">Группа: {{ group.course }}<br>Учитель:  {{ group.teacher }} <br> Количество студентво: {{group.students|get_students}}</div>
   <div class="card-body text-success">
       {% for student in group.students.all %}
          <h5 class="card-title"> {{ student.first_name }}  {{ student.last_name }} </h5>

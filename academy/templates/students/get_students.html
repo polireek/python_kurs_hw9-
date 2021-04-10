@@ -12,6 +12,7 @@
     <table class="table col-6">
       <thead>
         <tr>
+          <th scope="col">Фото</th>
           <th scope="col">Имя</th>
           <th scope="col">Фамилия</th>
           <th scope="col">Почта</th>
@@ -21,6 +22,7 @@
       <tbody>
       {% for student in students %}
         <tr>
+          <td><img src="{{student.avatar.url}}"  style = "width: 50px;"  class="card-img-top" alt="{{ student.first_name }} {{ student.last_name }}"></td>
           <td>{{ student.first_name }}</td>
           <td>{{ student.last_name }}</td>
           <td>{{ student.email }}</td>

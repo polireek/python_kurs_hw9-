@@ -12,7 +12,7 @@
 {% for lecturer in lecturers %}
 
 <div class="card col-4" style="width: 18rem; margin: 30px auto; text-align: center">
-    <img src="https://files.adme.ru/files/news/part_165/1658265/8881915-41015510-3-0-1514194738-1514194747-1500-1-1514194747-650-bf931488f4-1514279441.jpg" width="262" height="336" class="card-img-top" alt="{{ lecturer.first_name }} {{ lecturer.last_name }}">
+    <img src="{{lecturer.avatar.url}}" width="262" height="336" class="card-img-top" alt="{{ lecturer.first_name }} {{ lecturer.last_name }}">
     <div class="card-body">
         <h5 class="card-title">{{ lecturer.first_name }} {{ lecturer.last_name }}</h5>
         <p class="card-text">{{ lecturer.email }}</p>
