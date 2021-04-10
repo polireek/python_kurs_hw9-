@@ -3,12 +3,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
 from .tasks import send_email
+from exchanger.models import ExchangeRate
 
-
+from json import dumps
 
 
 def index(request):
-    return render(request, 'index.html')
+    exchange_rates = ExchangeRate.objects.all()
+    context = {
+        k: v for ex_rate in exchange_rates
+        for k, v in ex_rate.to_dict().items()
+    }
+    return render(request, 'index.html', context)
 
 
 def get_students(request):

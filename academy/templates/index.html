@@ -4,11 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Главная</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" type="text/css" href='{% static "css/table.css" %}'>
+
 </head>
 <body>
-
 {% include "base/header.html" %}
+<table>
+        <thread>
+            <tr>
+                <th></th>
+                <th>USD</th>
+                <th>EUR</th>
+                <th>Status Buy</th>
+                <th>Status Sell</th>
+            </tr>
+        </thread>
+        <tbody>
+            <tr>
+                <th>Buy</th>
 
+                <td>{{ usd_buy }}</td>
+                <td>{{ eur_buy }}</td>
+                <td>{{ usd_buy_s }}</td>
+                <td>{{ eur_buy_s }}</td>
+            </tr>
+            <tr>
+                <th>Sale</th>
+                <td>{{ usd_sell }}</td>
+                <td>{{ eur_sell }}</td>
+                <td>{{ usd_sell_s }}</td>
+                <td>{{ eur_sell_s }}</td>
+            </tr>
+        </tbody>
+    </table>
 
 </body>
 </html>

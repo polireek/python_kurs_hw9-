@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EXCHANGE_RATES_SOURCE = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
 SENDGRID_KEY ='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'
 EMAIL_SENDER = 'nikmenplay@gmail.com'
 EMAIL_RECEIVER = 'polireek@gmail.com'
@@ -43,10 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'academy.apps.AcademyConfig',
-    'fontawesome-free',
     'silk',
     'logger',
     'django_celery_beat',
+    'exchanger',
 ]
 
 MIDDLEWARE = [
