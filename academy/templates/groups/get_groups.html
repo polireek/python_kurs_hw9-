@@ -8,7 +8,7 @@
 </head>
 <body>
 {% include "base/header.html" %}
-    <button style="width: 30%;display: block;margin: 20px auto;"><a href="{% url 'add_course' %}" style="display: block;width: 100%;height: 100%;color: black;"><i class="fas fa-plus-square"> Добавить Группу</i></a></button>
+  {% if user.is_staff %}  <button style="width: 30%;display: block;margin: 20px auto;"><a href="{% url 'add_course' %}" style="display: block;width: 100%;height: 100%;color: black;"><i class="fas fa-plus-square"> Добавить Группу</i></a></button>{% endif %}
 <div class="container">
   <div class="row">
 {% for group in groups %}
@@ -21,7 +21,7 @@
          <p class="card-text"> Почта: {{ student.email }} </p>
       {% endfor %}
   </div>
-  <div class="card-footer bg-transparent border-success" style="margin: 10px auto; font-size: 20px;"><a href="{% url 'edit_group' id=group.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_group' id=group.id %}"><i class="far fa-trash-alt"></i></a></div>
+  {% if user.is_staff %}<div class="card-footer bg-transparent border-success" style="margin: 10px auto; font-size: 20px;"><a href="{% url 'edit_group' id=group.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_group' id=group.id %}"><i class="far fa-trash-alt"></i></a></div>{% endif %}
 </div>
 {% endfor %}
     </div>

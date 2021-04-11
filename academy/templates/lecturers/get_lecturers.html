@@ -6,7 +6,7 @@
 </head>
 <body>
 {% include "base/header.html" %}
- <button style="width: 30%;display: block;margin: 20px auto;"><a href="{% url 'add_teacher' %}" style="display: block;width: 100%;height: 100%;color: black;"><i class="fas fa-plus-square"> Добавить Учителя</i></a></button>
+ {% if user.is_staff %}<button style="width: 30%;display: block;margin: 20px auto;"><a href="{% url 'add_teacher' %}" style="display: block;width: 100%;height: 100%;color: black;"><i class="fas fa-plus-square"> Добавить Учителя</i></a></button>{% endif %}
 <div class="container">
   <div class="row">
 {% for lecturer in lecturers %}
@@ -16,7 +16,7 @@
     <div class="card-body">
         <h5 class="card-title">{{ lecturer.first_name }} {{ lecturer.last_name }}</h5>
         <p class="card-text">{{ lecturer.email }}</p>
-        <p style="font-size: 25px; padding: 0"><a href="{% url 'edit_lecturer' id=lecturer.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_lecturer' id=lecturer.id %}"><i class="far fa-trash-alt"></i></a></p>
+       {% if user.is_staff %} <p style="font-size: 25px; padding: 0"><a href="{% url 'edit_lecturer' id=lecturer.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_lecturer' id=lecturer.id %}"><i class="far fa-trash-alt"></i></a></p>{% endif %}
   </div>
 </div>
 

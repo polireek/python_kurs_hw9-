@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from . import views
 
@@ -10,11 +11,11 @@ urlpatterns = [
     path('add_teacher/', views.add_teacher, name='add_teacher'),
     path('add_course/', views.add_group, name='add_course'),
     path('', views.index, name='index'),
-    path('get_student/<int:id>/edit/', views.edit_student, name='edit_student'),
+    path('get_student/<int:id>/edit/', cache_page(60 * 5)(views.edit_student), name='edit_student'),
     path('get_student/<int:id>/delete/', views.delete_student, name='delete_student'),
-    path('get_lecturer/<int:id>/edit/', views.edit_lecturer, name='edit_lecturer'),
+    path('get_lecturer/<int:id>/edit/', cache_page(60 * 5)(views.edit_lecturer), name='edit_lecturer'),
     path('get_lecturer/<int:id>/delete/', views.delete_lecturer, name='delete_lecturer'),
-    path('get_group/<int:id>/edit/', views.edit_group, name='edit_group'),
+    path('get_group/<int:id>/edit/', cache_page(60 * 5)(views.edit_group), name='edit_group'),
     path('get_group/<int:id>/delete/', views.delete_group, name='delete_group'),
     path('contact_us/', views.send_message_to_email, name='contact_us'),
 ]

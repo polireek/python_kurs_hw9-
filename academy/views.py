@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.cache import cache_page
 
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
 from .tasks import send_email
 from exchanger.models import ExchangeRate
+from django.contrib.admin.views.decorators import staff_member_required
 
 from json import dumps
 
@@ -34,6 +36,7 @@ def get_groups(request):
     return render(request, 'groups/get_groups.html',
                   {'groups': groups})
 
+@staff_member_required
 def add_student(request):
     form = AddStudentForm()
     if request.method == 'POST':
@@ -45,6 +48,7 @@ def add_student(request):
     return render(request, 'students/add_student.html', {'form': form})
 
 
+@staff_member_required
 def add_teacher(request):
     form = AddLecturerForm()
     if request.method == 'POST':
@@ -56,6 +60,7 @@ def add_teacher(request):
     return render(request, 'lecturers/add_lecture.html', {'form': form})
 
 
+@staff_member_required
 def add_group(request):
     form = AddGroupForm()
     if request.method == 'POST':
@@ -67,6 +72,7 @@ def add_group(request):
     return render(request, 'lecturers/add_lecture.html', {'form': form})
 
 
+@staff_member_required
 def edit_lecturer(request, id):
     lecturer = get_object_or_404(Lecturer, id=id)
     if request.method == 'POST':
@@ -79,11 +85,13 @@ def edit_lecturer(request, id):
     return render(request, 'lecturers/edit_lecture.html', {'form': form})
 
 
+@staff_member_required
 def delete_lecturer(request, id):
     Lecturer.objects.filter(id=id).delete()
     return redirect('get_lecturers')
 
 
+@staff_member_required
 def edit_student(request, id):
     student = get_object_or_404(Student, id=id)
     if request.method == 'POST':
@@ -96,11 +104,13 @@ def edit_student(request, id):
     return render(request, 'students/edit_student.html', {'form': form})
 
 
+@staff_member_required
 def delete_student(request, id):
     Student.objects.filter(id=id).delete()
     return redirect('get_students')
 
 
+@staff_member_required
 def edit_group(request, id):
     group = get_object_or_404(Group, id=id)
     if request.method == 'POST':
@@ -113,6 +123,7 @@ def edit_group(request, id):
     return render(request, 'groups/edit_group.html', {'form': form})
 
 
+@staff_member_required
 def delete_group(request, id):
     Group.objects.filter(id=id).delete()
     return redirect('get_groups')

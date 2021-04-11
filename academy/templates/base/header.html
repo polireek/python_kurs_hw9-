@@ -13,7 +13,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
             <li><a class="dropdown-item" href="{% url 'get_students' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
-            <li><a class="dropdown-item" href="{% url 'add_student' %}"><i class="far fa-plus-square"></i> Добавить студента</a></li>
+            {% if user.is_staff %}<li><a class="dropdown-item" href="{% url 'add_student' %}"><i class="far fa-plus-square"></i> Добавить студента</a></li>{% endif %}
           </ul>
         </li>
           <li class="nav-item dropdown">
@@ -22,7 +22,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
             <li><a class="dropdown-item" href="{% url 'get_lecturers' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
-            <li><a class="dropdown-item" href="{% url 'add_teacher' %}"><i class="far fa-plus-square"></i> Добавить учителя</a></li>
+           {% if user.is_staff %} <li><a class="dropdown-item" href="{% url 'add_teacher' %}"><i class="far fa-plus-square"></i> Добавить учителя</a></li>{% endif %}
           </ul>
         </li>
           <li class="nav-item dropdown">
@@ -31,12 +31,12 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
             <li><a class="dropdown-item" href="{% url 'get_groups' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
-            <li><a class="dropdown-item" href="{% url 'add_course' %}"><i class="far fa-plus-square"></i> Добавить группу</a></li>
+           {% if user.is_staff %} <li><a class="dropdown-item" href="{% url 'add_course' %}"><i class="far fa-plus-square"></i> Добавить группу</a></li>{% endif %}
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link" href="{% url 'contact_us' %}" id="navbarDarkDropdownMenuLink" role="button"  aria-expanded="false">
-            Студенты
+            Связатся с нами
           </a>
 
       </ul>
