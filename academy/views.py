@@ -131,8 +131,11 @@ def delete_group(request, id):
 
 def send_message_to_email(request):
     new_message = None
+    sent = request.session.get('sent', False)
     if request.method == 'POST':
         data = { 'name': "IDK", 'email': "polireek@gmail.com", 'message': "Its working"}
+        if sent == False:
+            request.session['sent'] = True
         send_email(data)
         print(data["email"])
         message_form = ContactForm(data=request.POST)
@@ -142,7 +145,8 @@ def send_message_to_email(request):
 
     context = {
         'form': ContactForm(),
-        'new_message': new_message
+        'new_message': new_message,
+        'sent' : sent
     }
 
     return render(request, 'contact.html', context)

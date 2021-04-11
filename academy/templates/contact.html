@@ -8,10 +8,14 @@
 </head>
 <body>
 {% include "base/header.html" %}
+{% if sent %}
+            <p class ="box" style="color: white;">Вы недавно нам писали, мы с Вами свяжемся в ближайшее время</p>
+{% else %}
         <form class ="box" method="post">
             {{ form.as_p }}
             {% csrf_token %}
             <p><input type='submit' value='Отправить'></p>
         </form>
+{% endif %}
 </body>
 </html>
