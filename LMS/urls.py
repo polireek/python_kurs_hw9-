@@ -23,6 +23,6 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('academy.urls')),
-    url(r'^silk/', include('silk.urls', namespace='silk')),
+    #url(r'^silk/', include('silk.urls', namespace='silk')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

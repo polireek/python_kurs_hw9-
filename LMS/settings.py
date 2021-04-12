@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'academy.apps.AcademyConfig',
-    'silk',
+    # 'silk',
     'logger',
     'django_celery_beat',
     'exchanger',
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'silk.middleware.SilkyMiddleware',
+    #'silk.middleware.SilkyMiddleware',
     'logger.middleware.LoggerMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
 ]

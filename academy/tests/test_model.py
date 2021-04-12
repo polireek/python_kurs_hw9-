@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
+import pytest
 from django.core.exceptions import ValidationError
 
 from academy.models import Student, Lecturer, Group
@@ -32,6 +33,8 @@ class StudentModelTest(TestCase):
     def test_none_last_name(self):
         student = Student(first_name=self.first_name, last_name=None, email=self.email)
         student.full_clean()
+
+
 
 
 class LecturerModelTest(TestCase):
