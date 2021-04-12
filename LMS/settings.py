@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+import dj_database_url
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,7 +27,9 @@ SECRET_KEY = '(^49ujbpzz35if@mymu#di_p-rn^qbynm!jey9rf_e8qexh-!$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+
 
 EXCHANGE_RATES_SOURCE = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
 SENDGRID_KEY ='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'
@@ -102,6 +106,8 @@ DATABASES = {
     }
 }
 
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -148,6 +154,7 @@ AUTHENTICATION_BACKENDS = (
 'django.contrib.auth.backends.ModelBackend',
 'allauth.account.auth_backends.AuthenticationBackend',
 )
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
