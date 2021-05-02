@@ -1,5 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.cache import cache_page
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, DeleteView
 
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
@@ -7,7 +9,6 @@ from .tasks import send_email
 from exchanger.models import ExchangeRate
 from django.contrib.admin.views.decorators import staff_member_required
 
-from json import dumps
 
 
 def index(request):
@@ -36,28 +37,18 @@ def get_groups(request):
     return render(request, 'groups/get_groups.html',
                   {'groups': groups})
 
-@staff_member_required
-def add_student(request):
-    form = AddStudentForm()
-    if request.method == 'POST':
-        comment_form = AddStudentForm(data=request.POST)
-        if comment_form.is_valid():
-            new_student = comment_form.save(commit=False)
-            new_student.save()
 
-    return render(request, 'students/add_student.html', {'form': form})
+class StudentCreateView(LoginRequiredMixin, CreateView):
+    model = Student
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
 
-@staff_member_required
-def add_teacher(request):
-    form = AddLecturerForm()
-    if request.method == 'POST':
-        comment_form = AddLecturerForm(data=request.POST)
-        if comment_form.is_valid():
-            new_teacher = comment_form.save(commit=False)
-            new_teacher.save()
+class TeacherCreateView(LoginRequiredMixin, CreateView):
+    model = Lecturer
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
-    return render(request, 'lecturers/add_lecture.html', {'form': form})
 
 
 @staff_member_required
@@ -72,42 +63,28 @@ def add_group(request):
     return render(request, 'lecturers/add_lecture.html', {'form': form})
 
 
-@staff_member_required
-def edit_lecturer(request, id):
-    lecturer = get_object_or_404(Lecturer, id=id)
-    if request.method == 'POST':
-        form = AddLecturerForm(request.POST, instance=lecturer)
-        if form.is_valid():
-            lecturer.save()
-            return redirect('get_lecturers')
-
-    form = AddLecturerForm(instance=lecturer)
-    return render(request, 'lecturers/edit_lecture.html', {'form': form})
+class TeacherEditView(LoginRequiredMixin, UpdateView):
+    model = Lecturer
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
 
-@staff_member_required
-def delete_lecturer(request, id):
-    Lecturer.objects.filter(id=id).delete()
-    return redirect('get_lecturers')
+class TeacherDeleteView(LoginRequiredMixin, DeleteView):
+    model = Lecturer
+    template_name = 'form.html'
+    success_url = reverse_lazy('index')
 
 
-@staff_member_required
-def edit_student(request, id):
-    student = get_object_or_404(Student, id=id)
-    if request.method == 'POST':
-        form = AddStudentForm(request.POST, instance=student)
-        if form.is_valid():
-            student.save()
-            return redirect('get_students')
-
-    form = AddStudentForm(instance=student)
-    return render(request, 'students/edit_student.html', {'form': form})
+class StudentEditView(LoginRequiredMixin, UpdateView):
+    model = Student
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
 
-@staff_member_required
-def delete_student(request, id):
-    Student.objects.filter(id=id).delete()
-    return redirect('get_students')
+class StudentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Student
+    template_name = 'form.html'
+    success_url = reverse_lazy('index')
 
 
 @staff_member_required
