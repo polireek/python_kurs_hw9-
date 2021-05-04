@@ -19,8 +19,10 @@
        {% if user.is_staff %} <p style="font-size: 25px; padding: 0"><a href="{% url 'edit_lecturer' pk=lecturer.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_lecturer' pk=lecturer.id %}"><i class="far fa-trash-alt"></i></a></p>{% endif %}
   </div>
 </div>
-
 {% endfor %}
+      {% if lecturers.paginator.num_pages != 1 %}
+          {% include "base/paginator.html" with page=lecturers current_tag=current_tag %}
+      {% endif %}
     </div>
 </div>
 </body>

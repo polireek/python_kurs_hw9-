@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 
+from LMS.settings import STUDENTS_PER_PAGE, TEACHERS_PER_PAGE, GROUPS_PER_PAGE
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
 from .tasks import send_email
@@ -22,20 +24,51 @@ def index(request):
 
 def get_students(request):
     students = Student.objects.all().order_by('first_name')
+    paginator = Paginator(students, STUDENTS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+    context = {'students': students}
+    context['page'] = page
     return render(request, 'students/get_students.html',
-                  {'students': students})
+                  context)
 
 
 def get_lecturers(request):
     lecturers = Lecturer.objects.all().order_by('first_name')
+    paginator = Paginator(lecturers, TEACHERS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        lecturers = paginator.page(page)
+    except PageNotAnInteger:
+        lecturers = paginator.page(1)
+    except EmptyPage:
+        lecturers = paginator.page(paginator.num_pages)
+    context = {'lecturers': lecturers}
+    context['page'] = page
     return render(request, 'lecturers/get_lecturers.html',
-                  {'lecturers': lecturers})
+                  context)
 
 
 def get_groups(request):
     groups = Group.objects.all().order_by('course')
+    paginator = Paginator(groups, GROUPS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        groups = paginator.page(page)
+    except PageNotAnInteger:
+        groups = paginator.page(1)
+    except EmptyPage:
+        groups = paginator.page(paginator.num_pages)
+    context = {'groups': groups}
+    context['page'] = page
+
     return render(request, 'groups/get_groups.html',
-                  {'groups': groups})
+                      context)
 
 
 class StudentCreateView(LoginRequiredMixin, CreateView):

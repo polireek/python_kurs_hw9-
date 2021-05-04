@@ -8,20 +8,20 @@
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="students" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Студенты
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'get_students' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
+            <li><a class="dropdown-item" id="get_students" href="{% url 'get_students' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
             {% if user.is_staff %}<li><a class="dropdown-item" href="{% url 'add_student' %}"><i class="far fa-plus-square"></i> Добавить студента</a></li>{% endif %}
           </ul>
           </li>
           <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="teachers" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Учителя
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-            <li><a class="dropdown-item" href="{% url 'get_lecturers' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
+            <li><a class="dropdown-item" id="get_teachers" href="{% url 'get_lecturers' %}"><i class="far fa-list-alt"></i> Полный список</a></li>
            {% if user.is_staff %} <li><a class="dropdown-item" href="{% url 'add_teacher' %}"><i class="far fa-plus-square"></i> Добавить учителя</a></li>{% endif %}
           </ul>
         </li>
@@ -43,11 +43,11 @@
       </ul>
       <span class="navbar-text">
           {% if not user.is_authenticated %}
-          <a href="{% url 'login' %}">Login</a>
-          <a href="{% url 'signup' %}">Sign Up</a>
+          <a href="{% url 'login' %}"><button id="login">Login</button></a>
+          <a href="{% url 'signup' %}"><button id="sign_up">Sign Up</button></a>
           {% else %}
-           <a href="{% url 'logout' %}">Logout</a>
-          {{ user.get_full_name|default:user.username }}
+          <snap id="username">{{ user.get_full_name|default:user.username }}</snap>
+          <a href="{% url 'logout' %}">Logout</a>
            {% endif %}
       </span>
     </div>

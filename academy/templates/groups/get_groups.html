@@ -24,6 +24,9 @@
   {% if user.is_staff %}<div class="card-footer bg-transparent border-success" style="margin: 10px auto; font-size: 20px;"><a href="{% url 'edit_group' id=group.id %}"><i class="fas fa-edit"></i></a> <a href="{% url 'delete_group' id=group.id %}"><i class="far fa-trash-alt"></i></a></div>{% endif %}
 </div>
 {% endfor %}
+      {% if groups.paginator.num_pages != 1 %}
+          {% include "base/paginator.html" with page=groups current_tag=current_tag %}
+      {% endif %}
     </div>
 </div>
 </body>
