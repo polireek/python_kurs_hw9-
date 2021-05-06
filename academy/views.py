@@ -1,12 +1,18 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import request, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.http import HttpResponse
+from rest_framework.decorators import api_view
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_200_OK
+from rest_framework.response import Response
 
 from LMS.settings import STUDENTS_PER_PAGE, TEACHERS_PER_PAGE, GROUPS_PER_PAGE
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
+from .serializers import StudentSerializer, LecturerSerializer, GroupSerializer
 from .tasks import send_email
 from exchanger.models import ExchangeRate
 from django.contrib.admin.views.decorators import staff_member_required
@@ -160,3 +166,156 @@ def send_message_to_email(request):
     }
 
     return render(request, 'contact.html', context)
+
+
+@api_view(['GET', 'POST'])
+def students_api(request):
+    if request.method == 'GET':
+        student = Student.objects.all()
+        serializer = StudentSerializer(student, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        rdata = request.data
+        data = {
+            'first_name': rdata.get('first_name'),
+            'last_name': rdata.get('last_name'),
+            'email': rdata.get('email'),
+        }
+        serializer = StudentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'DELETE', 'PUT'])
+def student_api(request):
+    try:
+        student = Student.objects.get(pk=id)
+    except Student.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(student)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+        student.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        first_name = request.data.get('first_name')
+        if first_name:
+            student.first_name = first_name
+        last_name = request.data.get('last_name')
+        if last_name:
+            student.last_name = last_name
+        email = request.data.get('email')
+        if email:
+            student.email = email
+        student.save()
+        return Response(status=HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+def lecturers_api(request):
+    if request.method == 'GET':
+        lecturer = Lecturer.objects.all()
+        serializer = LecturerSerializer(lecturer, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        rdata = request.data
+        data = {
+            'first_name': rdata.get('first_name'),
+            'last_name': rdata.get('last_name'),
+            'email': rdata.get('email'),
+        }
+        serializer = LecturerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def lecturer_api(request, id):
+    try:
+        lecturer = Lecturer.objects.get(pk=id)
+    except Lecturer.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(lecturer)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+        lecturer.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        first_name = request.data.get('first_name')
+        if first_name:
+            lecturer.first_name = first_name
+        last_name = request.data.get('last_name')
+        if last_name:
+            lecturer.last_name = last_name
+        email = request.data.get('email')
+        if email:
+            lecturer.email = email
+        lecturer.save()
+        return Response(status=HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+def groups_api(request):
+    if request.method == 'GET':
+        group = Group.objects.all()
+        serializer = GroupSerializer(group, many=True)
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        rdata = request.data
+        data = {
+            'course': rdata.get('course'),
+            'students': rdata.get('students'),
+            'teacher': rdata.get('teacher'),
+        }
+        serializer = GroupSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def group_api(request, id):
+    try:
+        group = Group.objects.get(id=id)
+    except Group.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = GroupSerializer(group)
+        return Response(serializer.data)
+
+    if request.method == 'DELETE':
+        group.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
+
+    if request.method == 'PUT':
+        course = request.data.get('course')
+        if course:
+            group.course = course
+        teacher = request.data.get('teacher')
+        if teacher:
+            group.teacher = Lecturer.objects.get(pk=teacher)
+        students = request.data.get('students')
+        if students:
+            group.students.set(students)
+        group.save()
+        return Response(status=HTTP_200_OK)

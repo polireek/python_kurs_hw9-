@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'exchanger',
     'users',
+    'rest_framework',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -171,6 +172,11 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
