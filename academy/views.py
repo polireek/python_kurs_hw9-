@@ -1,13 +1,16 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.cache import cache_page
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, UpdateView, DeleteView
 
+from LMS.settings import STUDENTS_PER_PAGE, TEACHERS_PER_PAGE, GROUPS_PER_PAGE
 from .models import Group, Lecturer, Student
 from .forms import AddStudentForm, AddLecturerForm, AddGroupForm, ContactForm
 from .tasks import send_email
 from exchanger.models import ExchangeRate
 from django.contrib.admin.views.decorators import staff_member_required
 
-from json import dumps
 
 
 def index(request):
@@ -21,43 +24,64 @@ def index(request):
 
 def get_students(request):
     students = Student.objects.all().order_by('first_name')
+    paginator = Paginator(students, STUDENTS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+    context = {'students': students}
+    context['page'] = page
     return render(request, 'students/get_students.html',
-                  {'students': students})
+                  context)
 
 
 def get_lecturers(request):
     lecturers = Lecturer.objects.all().order_by('first_name')
+    paginator = Paginator(lecturers, TEACHERS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        lecturers = paginator.page(page)
+    except PageNotAnInteger:
+        lecturers = paginator.page(1)
+    except EmptyPage:
+        lecturers = paginator.page(paginator.num_pages)
+    context = {'lecturers': lecturers}
+    context['page'] = page
     return render(request, 'lecturers/get_lecturers.html',
-                  {'lecturers': lecturers})
+                  context)
 
 
 def get_groups(request):
     groups = Group.objects.all().order_by('course')
+    paginator = Paginator(groups, GROUPS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        groups = paginator.page(page)
+    except PageNotAnInteger:
+        groups = paginator.page(1)
+    except EmptyPage:
+        groups = paginator.page(paginator.num_pages)
+    context = {'groups': groups}
+    context['page'] = page
+
     return render(request, 'groups/get_groups.html',
-                  {'groups': groups})
-
-@staff_member_required
-def add_student(request):
-    form = AddStudentForm()
-    if request.method == 'POST':
-        comment_form = AddStudentForm(data=request.POST)
-        if comment_form.is_valid():
-            new_student = comment_form.save(commit=False)
-            new_student.save()
-
-    return render(request, 'students/add_student.html', {'form': form})
+                      context)
 
 
-@staff_member_required
-def add_teacher(request):
-    form = AddLecturerForm()
-    if request.method == 'POST':
-        comment_form = AddLecturerForm(data=request.POST)
-        if comment_form.is_valid():
-            new_teacher = comment_form.save(commit=False)
-            new_teacher.save()
+class StudentCreateView(LoginRequiredMixin, CreateView):
+    model = Student
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
-    return render(request, 'lecturers/add_lecture.html', {'form': form})
+
+class TeacherCreateView(LoginRequiredMixin, CreateView):
+    model = Lecturer
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
+
 
 
 @staff_member_required
@@ -72,42 +96,28 @@ def add_group(request):
     return render(request, 'lecturers/add_lecture.html', {'form': form})
 
 
-@staff_member_required
-def edit_lecturer(request, id):
-    lecturer = get_object_or_404(Lecturer, id=id)
-    if request.method == 'POST':
-        form = AddLecturerForm(request.POST, instance=lecturer)
-        if form.is_valid():
-            lecturer.save()
-            return redirect('get_lecturers')
-
-    form = AddLecturerForm(instance=lecturer)
-    return render(request, 'lecturers/edit_lecture.html', {'form': form})
+class TeacherEditView(LoginRequiredMixin, UpdateView):
+    model = Lecturer
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
 
-@staff_member_required
-def delete_lecturer(request, id):
-    Lecturer.objects.filter(id=id).delete()
-    return redirect('get_lecturers')
+class TeacherDeleteView(LoginRequiredMixin, DeleteView):
+    model = Lecturer
+    template_name = 'form.html'
+    success_url = reverse_lazy('index')
 
 
-@staff_member_required
-def edit_student(request, id):
-    student = get_object_or_404(Student, id=id)
-    if request.method == 'POST':
-        form = AddStudentForm(request.POST, instance=student)
-        if form.is_valid():
-            student.save()
-            return redirect('get_students')
-
-    form = AddStudentForm(instance=student)
-    return render(request, 'students/edit_student.html', {'form': form})
+class StudentEditView(LoginRequiredMixin, UpdateView):
+    model = Student
+    template_name = 'form.html'
+    fields = ['first_name', 'last_name', 'email', 'avatar']
 
 
-@staff_member_required
-def delete_student(request, id):
-    Student.objects.filter(id=id).delete()
-    return redirect('get_students')
+class StudentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Student
+    template_name = 'form.html'
+    success_url = reverse_lazy('index')
 
 
 @staff_member_required
