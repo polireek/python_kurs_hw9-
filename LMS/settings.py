@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import datetime
 import os
 from pathlib import Path
 
@@ -22,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(^49ujbpzz35if@mymu#di_p-rn^qbynm!jey9rf_e8qexh-!$'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+SENDGRID_KEY = os.environ.get('SENDGRID_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,7 +35,6 @@ ALLOWED_HOSTS = ['*']
 
 
 EXCHANGE_RATES_SOURCE = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5"
-SENDGRID_KEY ='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'
 EMAIL_SENDER = 'nikmenplay@gmail.com'
 EMAIL_RECEIVER = 'polireek@gmail.com'
 
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'exchanger',
     'users',
+    'rest_framework',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -103,8 +106,12 @@ SITE_ID = 2
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 
@@ -170,6 +177,18 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online'
         }
     }
+}
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+    ]
+}
+
+JWT_AUTH = {
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
 LOGIN_REDIRECT_URL = '/'
