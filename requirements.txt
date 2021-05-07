@@ -25,10 +25,6 @@ django-silk==4.1.0
 django-timezone-field==4.1.2
 djangorestframework==3.12.4
 Faker==6.5.0
-flake8==3.8.4
-flake8-builtins==1.5.3
-flake8-import-order==0.18.1
-flake8-print==4.0.0
 gprof2dot==2021.2.21
 gunicorn==20.1.0
 idna==2.10
@@ -51,7 +47,6 @@ PyJWT==2.0.1
 pyparsing==2.4.7
 pytest==6.2.2
 pytest-django==4.2.0
-pytest-flake8==1.0.7
 python-crontab==2.5.1
 python-dateutil==2.8.1
 python-http-client==3.3.2
