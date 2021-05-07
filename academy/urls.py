@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/v1/lecturer/<int:id>/', views.lecturer_api),
     path('api/v1/groups/', views.groups_api),
     path('api/v1/group/<int:id>/', views.group_api),
+    path('api/v1/auth/', views.authenticate_user),
 ]
