@@ -20,4 +20,11 @@ urlpatterns = [
     path('get_group/<int:id>/edit/', cache_page(60 * 5)(views.edit_group), name='edit_group'),
     path('get_group/<int:id>/delete/', views.delete_group, name='delete_group'),
     path('contact_us/', views.send_message_to_email, name='contact_us'),
+    path('api/v1/students/', views.students_api),
+    path('api/v1/student/<int:id>/', views.student_api),
+    path('api/v1/lecturers/', views.lecturers_api),
+    path('api/v1/lecturer/<int:id>/', views.lecturer_api),
+    path('api/v1/groups/', views.groups_api),
+    path('api/v1/group/<int:id>/', views.group_api),
+    path('api/v1/auth/', views.authenticate_user),
 ]
